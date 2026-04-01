@@ -1,0 +1,35 @@
+{
+  "booking": {
+    "payment_required": {
+      "security_deposit": {
+        "non_ac": 5000,
+        "ac": 6000
+      },
+      "advance_rent": "1 month rent"
+    },
+    "total_at_booking": "Security Deposit + 1 Month Rent",
+    "note": "Security deposit is refundable as per policy"
+  },
+  "cancellation": {
+    "before_move_in": "1 month rent deduction",
+    "after_move_in": "Minimum stay 2 months"
+  },
+  "notice": {
+    "period": "1 month",
+    "mode": "email mandatory",
+    "penalty_no_notice": "Pay current + next month rent"
+  },
+  "refund": {
+    "timeline": "Within 7 days after clearance",
+    "restriction": "Deposit cannot be adjusted in rent or bills"
+  },
+  "stay_rules": {
+    "minimum_stay": "2 months"
+  },
+  "prohibitions": [
+    "No alcohol or drugs",
+    "No weapons",
+    "No illegal activity",
+    "Girls only accommodation"
+  ]
+}

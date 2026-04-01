@@ -1,0 +1,87 @@
+{
+  "hostel": "Princess Cottage (Girls Only)",
+  "last_updated": "2026-03-31",
+  "availability": [
+    {
+      "type": "Single Sharing",
+      "rent_per_head": 4400,
+      "ac": false,
+      "attached_washroom": false,
+      "available": false
+    },
+    {
+      "type": "Double Sharing",
+      "rent_per_head": 3850,
+      "ac": false,
+      "attached_washroom": false,
+      "available": true
+    },
+    {
+      "type": "Two Sharing",
+      "rent_per_head": 3850,
+      "ac": false,
+      "attached_washroom": false,
+      "available": true
+    },
+    {
+      "type": "Three Sharing Attached Washroom",
+      "rent_per_head": 3850,
+      "ac": false,
+      "attached_washroom": true,
+      "available": true
+    },
+    {
+      "type": "Three Sharing",
+      "rent_per_head": 3300,
+      "ac": false,
+      "attached_washroom": false,
+      "available": true
+    },
+    {
+      "type": "AC Three Sharing Attached Washroom",
+      "rent_per_head": 4400,
+      "ac": true,
+      "attached_washroom": true,
+      "available": false
+    },
+    {
+      "type": "AC Two Sharing",
+      "rent_per_head": 4950,
+      "ac": true,
+      "attached_washroom": false,
+      "available": false
+    },
+    {
+      "type": "AC 4 Sharing Attached Washroom",
+      "rent_per_head": 4400,
+      "ac": true,
+      "attached_washroom": true,
+      "available": true
+    },
+    {
+      "type": "4 Sharing",
+      "rent_per_head": 3300,
+      "ac": false,
+      "attached_washroom": false,
+      "available": true
+    }
+  ],
+  "charges": {
+    "electricity": "₹7.6/unit + 4% duty (split per room)",
+    "water": "shared across hostel"
+  },
+  "deposit": {
+    "non_ac": 5000,
+    "ac": 6000
+  },
+  "short_stay": {
+    "price_range_per_day": "₹250–₹350",
+    "note": "subject to availability"
+  },
+  "rent_rules": {
+    "cycle": "1st–30th",
+    "due_date": "1st",
+    "grace_period_days": 5,
+    "late_fee_per_day": 25
+  }
+}
