@@ -16,6 +16,8 @@ from prompts import SYSTEM_PROMPT
 import time
 import asyncio
 
+from livekit.plugins import deepgram, groq, silero
+
 load_dotenv()
 
 
@@ -135,17 +137,23 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession(
         stt=deepgram.STT(model="nova-2-general", language="en-IN"),
         llm=groq.LLM(model="llama-3.1-8b-instant"),
-        tts=elevenlabs.TTS(
-            api_key=os.getenv("ELEVENLABS_API_KEY"),
-            voice_id="pFZP5JQG7iQjIQuC4Bku",
-            model="eleven_turbo_v2_5",
-            voice_settings=elevenlabs.VoiceSettings(
-                stability=0.35,  # VERY LOW = More human emotion and natural flow
-                similarity_boost=0.8,  # Keeps her sounding Indian
-                style=0.5,  # Adds "air" and warmth
-                use_speaker_boost=True
-            )
+        tts=deepgram.TTS(
+            model="aura-asteria-en",  # Professional, fast female voice
+            # It automatically uses the DEEPGRAM_API_KEY from your env
         ),
+        # tts=elevenlabs.TTS(
+        #     api_key=os.getenv("ELEVENLABS_API_KEY"),
+        #     voice_id="EXAVITQu4vr4xnSDxMaL",
+        #     model="eleven_turbo_v2_5",
+        #     streaming_latency=4,
+        #     chunk_length_schedule=[30, 60, 120],
+        #     voice_settings=elevenlabs.VoiceSettings(
+        #         stability=0.7,
+        #         similarity_boost=0.85,
+        #         style=0.3,
+        #         use_speaker_boost=True
+        #     )
+        # ),
         vad=silero.VAD.load(),
     )
 
@@ -165,18 +173,26 @@ async def entrypoint(ctx: JobContext):
                 text = item.content.strip()
 
             if text:
-                role_name = "Ankita" if item.role == "assistant" else "User"
+                role_name = "AI assistant" if item.role == "assistant" else "User"
                 entry = f"{role_name}: {text}"
                 print(f"✍️ TRAPPED: {entry}")
                 chat_history.append(entry)
 
     await session.start(room=ctx.room, agent=agent_instance)
 
-    await session.say(
-        "Hello... -- and welcome to Princess Cottage. -- My name is Ankita. "
-        "How can I help you with your inquiry today?",
-        allow_interruptions=False
-    )
+    chunks = [
+        "Hello.",
+        "Welcome to Princess Cottage.",
+        "How may I help you?"
+    ]
+
+    for chunk in chunks:
+        await session.say(chunk, allow_interruptions=False)
+
+    # await session.say(
+    #     "Namaste. Welcome to Princess Cottage. How may I assist you today?",
+    #     allow_interruptions=False
+    # )
 
     upload_done = False
     async def final_upload():

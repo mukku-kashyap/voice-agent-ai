@@ -26,10 +26,30 @@
   "stay_rules": {
     "minimum_stay": "2 months"
   },
+  "food": {
+    "food": "We do not provide food"
+  },
+  "cooking": {
+    "cooking": "Cooking is allowed in common area"
+  },
+  "timeing": {
+    "entry_time": "10 PM",
+    "exit_time": "6 AM"
+  },
   "prohibitions": [
     "No alcohol or drugs",
     "No weapons",
     "No illegal activity",
     "Girls only accommodation"
+  ],
+  "facilities": [
+    "Water Purifier",
+    "Water Cooler",
+    "Housekeeping",
+    "Power Backup",
+    "Prime Location",
+    "Free High Speed Wi-Fi",
+    "Housekeeping",
+    "CCTV Surveillance"
   ]
 }
