@@ -1,87 +1,21 @@
 {
   "hostel": "Princess Cottage (Girls Only)",
-  "last_updated": "2026-03-31",
+  "last_updated": "2026-04-02",
   "availability": [
-    {
-      "type": "Single Sharing",
-      "rent_per_head": 4400,
-      "ac": false,
-      "attached_washroom": false,
-      "available": false
-    },
-    {
-      "type": "Double Sharing",
-      "rent_per_head": 3850,
-      "ac": false,
-      "attached_washroom": false,
-      "available": true
-    },
-    {
-      "type": "Two Sharing",
-      "rent_per_head": 3850,
-      "ac": false,
-      "attached_washroom": false,
-      "available": true
-    },
-    {
-      "type": "Three Sharing Attached Washroom",
-      "rent_per_head": 3850,
-      "ac": false,
-      "attached_washroom": true,
-      "available": true
-    },
-    {
-      "type": "Three Sharing",
-      "rent_per_head": 3300,
-      "ac": false,
-      "attached_washroom": false,
-      "available": true
-    },
-    {
-      "type": "AC Three Sharing Attached Washroom",
-      "rent_per_head": 4400,
-      "ac": true,
-      "attached_washroom": true,
-      "available": false
-    },
-    {
-      "type": "AC Two Sharing",
-      "rent_per_head": 4950,
-      "ac": true,
-      "attached_washroom": false,
-      "available": false
-    },
-    {
-      "type": "AC 4 Sharing Attached Washroom",
-      "rent_per_head": 4400,
-      "ac": true,
-      "attached_washroom": true,
-      "available": true
-    },
-    {
-      "type": "4 Sharing",
-      "rent_per_head": 3300,
-      "ac": false,
-      "attached_washroom": false,
-      "available": true
-    }
+    { "type": "Single Sharing", "rent": 4400, "ac": false, "washroom": "Common", "available": false },
+    { "type": "Double Sharing", "rent": 3850, "ac": false, "washroom": "Common", "available": true },
+    { "type": "Two Sharing", "rent": 3850, "ac": false, "washroom": "Common", "available": true },
+    { "type": "Three Sharing Attached", "rent": 3850, "ac": false, "washroom": "Attached", "available": true },
+    { "type": "Three Sharing Standard", "rent": 3300, "ac": false, "washroom": "Common", "available": true },
+    { "type": "AC Three Sharing Attached", "rent": 4400, "ac": true, "washroom": "Attached", "available": true },
+    { "type": "AC Two Sharing", "rent": 4950, "ac": true, "washroom": "Common", "available": true },
+    { "type": "AC Four Sharing Attached", "rent": 4400, "ac": true, "washroom": "Attached", "available": true },
+    { "type": "Four Sharing Standard", "rent": 3300, "ac": false, "washroom": "Common", "available": true }
   ],
-  "charges": {
-    "electricity": "₹7.6/unit + 4% duty (split per room)",
-    "water": "shared across hostel"
-  },
-  "deposit": {
-    "non_ac": 5000,
-    "ac": 6000
-  },
-  "short_stay": {
-    "price_range_per_day": "₹250–₹350",
-    "note": "subject to availability"
-  },
-  "rent_rules": {
-    "cycle": "1st–30th",
-    "due_date": "1st",
-    "grace_period_days": 5,
-    "late_fee_per_day": 25
+  "money": {
+    "electricity": "₹7.6 per unit plus 4% duty, split per room",
+    "security_deposit_non_ac": 5000,
+    "security_deposit_ac": 6000,
+    "short_stay": "₹250 for Non-AC or ₹350 for AC per day"
   }
 }

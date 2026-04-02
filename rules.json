@@ -1,55 +1,20 @@
 {
-  "booking": {
-    "payment_required": {
-      "security_deposit": {
-        "non_ac": 5000,
-        "ac": 6000
-      },
-      "advance_rent": "1 month rent"
-    },
-    "total_at_booking": "Security Deposit + 1 Month Rent",
-    "note": "Security deposit is refundable as per policy"
+  "onboarding": {
+    "booking_process": "Payment of a Security Deposit plus one month advance rent.",
+    "documents": "Application form, Address proof, and Aadhaar ID are mandatory.",
+    "security_deposit_non_ac": 5000,
+    "security_deposit_ac": 6000,
+    "total_initial_payment": "Deposit amount + First month rent"
   },
-  "cancellation": {
-    "before_move_in": "1 month rent deduction",
-    "after_move_in": "Minimum stay 2 months"
+  "policies": {
+    "min_stay": "2 months mandatory stay.",
+    "notice": "1 month notice via email is mandatory.",
+    "refunds": "Within 7 days of clearance. Deposit cannot be used for rent."
   },
-  "notice": {
-    "period": "1 month",
-    "mode": "email mandatory",
-    "penalty_no_notice": "Pay current + next month rent"
+  "house_rules": {
+    "food": "No food provided. Self-cooking is allowed in the common area.",
+    "gate": "10 PM closing, 6 AM opening. Special cases allowed for exams.",
+    "guests": "Strictly Girls Only. No males allowed. Female guests stay is chargeable."
   },
-  "refund": {
-    "timeline": "Within 7 days after clearance",
-    "restriction": "Deposit cannot be adjusted in rent or bills"
-  },
-  "stay_rules": {
-    "minimum_stay": "2 months"
-  },
-  "food": {
-    "food": "We do not provide food"
-  },
-  "cooking": {
-    "cooking": "Cooking is allowed in common area"
-  },
-  "timeing": {
-    "entry_time": "10 PM",
-    "exit_time": "6 AM"
-  },
-  "prohibitions": [
-    "No alcohol or drugs",
-    "No weapons",
-    "No illegal activity",
-    "Girls only accommodation"
-  ],
-  "facilities": [
-    "Water Purifier",
-    "Water Cooler",
-    "Housekeeping",
-    "Power Backup",
-    "Prime Location",
-    "Free High Speed Wi-Fi",
-    "Housekeeping",
-    "CCTV Surveillance"
-  ]
+  "facilities": ["Free Wi-Fi", "Power Backup", "Water Purifier", "CCTV", "Housekeeping"]
 }

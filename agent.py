@@ -8,9 +8,6 @@ from livekit import rtc
 from livekit.agents import JobContext, WorkerOptions, cli, llm, Agent, AgentSession
 from livekit.agents import function_tool
 
-# --- PLUGINS ---
-from livekit.plugins import deepgram, silero, elevenlabs, groq
-
 # --- YOUR EXTERNAL PROMPT ---
 from prompts import SYSTEM_PROMPT
 import time
@@ -19,11 +16,6 @@ import asyncio
 from livekit.plugins import deepgram, groq, silero
 
 load_dotenv()
-
-
-# ========================================
-# JSON TOOL DEFINITIONS (ASYNC FIX)
-# ========================================
 
 def _load_json(filename):
     """Internal helper to read your JSON data safely."""
@@ -37,35 +29,42 @@ def _load_json(filename):
         return None
 
 
-# ADDED 'async' keyword to make these awaitable by the Agent
-@function_tool(description="Lookup current room availability, rent prices, and security deposits.")
-async def get_room_info(room_type: str = None) -> str:
-    """Provides details about room sharing types and costs."""
+@function_tool(description="Check room availability, rents, and deposits.")
+async def get_room_info(query: str = "all") -> str:
     data = _load_json("seat_availibility.json")
-    if not data: return "Room data is currently unavailable."
+    if not data: return "Data unavailable."
 
-    if room_type:
-        availability = data.get('availability', [])
-        matches = [r for r in availability if room_type.lower() in r.get('type', '').lower()]
-        return json.dumps(matches) if matches else f"No rooms matching '{room_type}' found."
+    q = query.lower()
+    all_rooms = data.get('availability', [])
 
-    return json.dumps(data)
+    # Filter based on user needs
+    matches = [r for r in all_rooms if q in r['type'].lower() or q == "all"]
+
+    # Bundle the money info so Ankita doesn't get confused
+    response = {
+        "rooms_found": matches,
+        "security_deposits": data['money'],
+        "electricity": data['money']['electricity']
+    }
+    return json.dumps(response)
 
 
-@function_tool(description="Lookup hostel rules, booking, cancellation, and stay policies.")
-async def get_hostel_policies(category: str = "all") -> str:
-    """Provides details about hostel regulations and notice periods."""
+@function_tool(description="Lookup rules, food, cooking, timing, and guest policies.")
+async def get_hostel_policies(query: str = "all") -> str:
+    """Provides details about hostel regulations and procedures."""
     data = _load_json("rules.json")
     if not data: return "Policy data is currently unavailable."
 
-    if category != "all" and category in data:
-        return json.dumps(data[category])
+    q = query.lower()
+
+    # If the user asks specifically about something, we filter the relevant section
+    if "food" in q or "cook" in q: return json.dumps(data['house_rules']['food'] + " " + data['house_rules']['cooking'])
+    if "time" in q or "gate" in q: return json.dumps(data['house_rules']['gate'])
+    if "guest" in q or "male" in q: return json.dumps(data['house_rules']['guests'])
+    if "pay" in q or "book" in q or "deposit" in q: return json.dumps(data['onboarding'])
+
+    # Default: Return everything so the LLM can pick the best answer
     return json.dumps(data)
-
-
-# ========================================
-# ASYNC AIRTABLE LOGGING
-# ========================================
 
 async def log_to_airtable(caller_number, full_transcript, duration):
     pat = os.getenv("AIRTABLE_PAT")
@@ -111,7 +110,6 @@ async def safe_upload(ctx, chat_history, start_time):
         print("ℹ️ No transcript captured. Skipping Airtable.")
         return
 
-    # Extract number: call-_+919861579417_2J... -> +919861579417
     parts = ctx.room.name.split('_')
     caller_number = parts[1] if len(parts) > 1 else ctx.room.name
 
@@ -119,7 +117,6 @@ async def safe_upload(ctx, chat_history, start_time):
     print(f"📡 CALL ENDED. Uploading to Airtable for: {caller_number}")
 
     try:
-        # Use a timeout so the worker doesn't hang if Airtable is slow
         await asyncio.wait_for(
             log_to_airtable(caller_number, full_transcript, duration),
             timeout=15.0
@@ -137,24 +134,8 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession(
         stt=deepgram.STT(model="nova-2-general", language="en-IN"),
         llm=groq.LLM(model="llama-3.1-8b-instant"),
-        tts=deepgram.TTS(
-            model="aura-asteria-en",  # Professional, fast female voice
-            # It automatically uses the DEEPGRAM_API_KEY from your env
-        ),
-        # tts=elevenlabs.TTS(
-        #     api_key=os.getenv("ELEVENLABS_API_KEY"),
-        #     voice_id="EXAVITQu4vr4xnSDxMaL",
-        #     model="eleven_turbo_v2_5",
-        #     streaming_latency=4,
-        #     chunk_length_schedule=[30, 60, 120],
-        #     voice_settings=elevenlabs.VoiceSettings(
-        #         stability=0.7,
-        #         similarity_boost=0.85,
-        #         style=0.3,
-        #         use_speaker_boost=True
-        #     )
-        # ),
-        vad=silero.VAD.load(),
+        tts=deepgram.TTS(model="aura-luna-en"),
+        vad=silero.VAD.load()
     )
 
     agent_instance = Agent(
@@ -167,6 +148,7 @@ async def entrypoint(ctx: JobContext):
         item = event.item
         if item and item.content:
             # Check if content is a list and join it, or just use it if it's a string
+
             if isinstance(item.content, list):
                 text = " ".join([str(c) for c in item.content]).strip()
             else:
@@ -175,24 +157,12 @@ async def entrypoint(ctx: JobContext):
             if text:
                 role_name = "AI assistant" if item.role == "assistant" else "User"
                 entry = f"{role_name}: {text}"
-                print(f"✍️ TRAPPED: {entry}")
+                if "function=" not in entry:
+                    print(f"✍️ TRAPPED: {entry}")
                 chat_history.append(entry)
 
     await session.start(room=ctx.room, agent=agent_instance)
-
-    chunks = [
-        "Hello.",
-        "Welcome to Princess Cottage.",
-        "How may I help you?"
-    ]
-
-    for chunk in chunks:
-        await session.say(chunk, allow_interruptions=False)
-
-    # await session.say(
-    #     "Namaste. Welcome to Princess Cottage. How may I assist you today?",
-    #     allow_interruptions=False
-    # )
+    await session.say("Hello and welcome to Princess Cottage. How may I help you today?", allow_interruptions=True)
 
     upload_done = False
     async def final_upload():
